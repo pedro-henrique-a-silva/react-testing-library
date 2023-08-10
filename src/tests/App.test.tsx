@@ -1,46 +1,31 @@
 import { screen } from '@testing-library/react';
 import App from '../App';
 import renderWithRouter from '../renderWithRouter';
-// Teste se o topo da aplicação contém um conjunto fixo de links de navegação:
-// O primeiro link deve ter o texto Home.
 
-// O segundo link deve ter o texto About.
+test('Testa se menu de navegação existe', async () => {
+  const { user } = renderWithRouter(<App />);
 
-// O terceiro link deve ter o texto Favorite Pokémon.
+  // const headerComponent = screen.getBt
+  const linkHome = await screen.findByRole('link', { name: /Home/i });
+  const linkSobre = await screen.findByRole('link', { name: /About/i });
+  const linkFavorito = await screen.findByRole('link', { name: /Favorite Pokémon/i });
 
-// Teste se a aplicação é redirecionada para a página inicial, na URL /, ao clicar no link Home da barra de navegação.
+  expect(linkHome).toBeInTheDocument();
+  expect(linkSobre).toBeInTheDocument();
+  expect(linkFavorito).toBeInTheDocument();
 
-// Teste se a aplicação é redirecionada para a página de About, na URL /about, ao clicar no link About da barra de navegação.
+  await user.click(linkHome);
 
-// Teste se a aplicação é redirecionada para a página de Pokémon Favoritados, na URL /favorites, ao clicar no link Favorite Pokémon da barra de navegação.
+  const titleHome = await screen.findByRole('heading', { name: /Encountered Pokémon/i, level: 2 });
+  expect(titleHome).toBeInTheDocument();
 
-// Teste se a aplicação é redirecionada para a página Not Found ao entrar em uma URL desconhecida.
-describe('Testa menu de navegação', () => {
-  test('Testa se menu de navegação existe', async () => {
-    const { user } = renderWithRouter(<App />);
+  await user.click(linkSobre);
 
-    // const headerComponent = screen.getBt
-    const linkHome = await screen.findByRole('link', { name: /Home/i });
-    const linkSobre = await screen.findByRole('link', { name: /About/i });
-    const linkFavorito = await screen.findByRole('link', { name: /Favorite Pokémon/i });
+  const titleSobre = await screen.findByRole('heading', { name: /About Pokédex/i, level: 2 });
+  expect(titleSobre).toBeInTheDocument();
 
-    expect(linkHome).toBeInTheDocument();
-    expect(linkSobre).toBeInTheDocument();
-    expect(linkFavorito).toBeInTheDocument();
+  await user.click(linkFavorito);
 
-    await user.click(linkHome);
-
-    const titleHome = await screen.findByRole('heading', { name: /Encountered Pokémon/i, level: 2 });
-    expect(titleHome).toBeInTheDocument();
-
-    await user.click(linkSobre);
-
-    const titleSobre = await screen.findByRole('heading', { name: /About Pokédex/i, level: 2 });
-    expect(titleSobre).toBeInTheDocument();
-
-    await user.click(linkFavorito);
-
-    const titleFavorito = await screen.findByRole('heading', { name: /Favorite Pokémon/i, level: 2 });
-    expect(titleFavorito).toBeInTheDocument();
-  });
+  const titleFavorito = await screen.findByRole('heading', { name: /Favorite Pokémon/i, level: 2 });
+  expect(titleFavorito).toBeInTheDocument();
 });
