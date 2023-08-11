@@ -1,7 +1,6 @@
-import { findByTestId, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import App from '../App';
 import renderWithRouter from '../renderWithRouter';
-import pokemonList from '../data';
 
 // Teste se é mostrado apenas um Pokémon por vez.
 // Teste se a Pokédex tem os botões de filtro:
@@ -22,7 +21,8 @@ import pokemonList from '../data';
 // É possível clicar no botão de filtragem All
 describe('Tesando funcionamento da pokedex', () => {
   test('Verificando se existe um H2 na tela, e funcionalidade do botão proximo pokemon', async () => {
-    const { container, user } = renderWithRouter(<App />);
+    const { user } = renderWithRouter(<App />);
+
     const titlePokedex = await screen.findByRole('heading', { level: 2, name: /Encountered Pokémon/i });
     expect(titlePokedex).toBeInTheDocument();
 
@@ -54,7 +54,7 @@ describe('Tesando funcionamento da pokedex', () => {
   });
 
   test('Verifica se os botões de filtro estão na tela', async () => {
-    const { container, user } = renderWithRouter(<App />);
+    const { user } = renderWithRouter(<App />);
 
     const testButtonFilter = async (buttonFilter: HTMLElement) => {
       await user.click(buttonFilter);
@@ -68,16 +68,14 @@ describe('Tesando funcionamento da pokedex', () => {
       expect(pokemonName).toBeInTheDocument();
       expect(pokemonType).toBeInTheDocument();
       expect(pokemonWeight).toBeInTheDocument();
-      expect(pokemonType.textContent).not.toEqual('');
+      expect(pokemonType.textContent).not.toBe('');
 
       if (buttonContent === 'All') {
-        console.log(buttonContent);
-
-        expect(pokemonType.textContent).toEqual('Electric');
-        expect(pokemonName.textContent).toEqual('Pikachu');
-        expect(pokemonNextButton).not.toHaveAttribute('disabled');
+        expect(pokemonType.textContent).toBe('Electric');
+        expect(pokemonName.textContent).toBe('Pikachu');
+        expect(pokemonNextButton).toBeEnabled();
       } else {
-        expect(pokemonType.textContent).toEqual(buttonContent);
+        expect(pokemonType.textContent).toBe(buttonContent);
       }
     };
 
@@ -87,7 +85,6 @@ describe('Tesando funcionamento da pokedex', () => {
     expect(filterButtons).not.toHaveLength(0);
     expect(filterAllButton).toBeInTheDocument();
 
-    await testButtonFilter(filterAllButton);
     await testButtonFilter(filterButtons[0]);
     await testButtonFilter(filterButtons[1]);
     await testButtonFilter(filterButtons[2]);
@@ -95,5 +92,6 @@ describe('Tesando funcionamento da pokedex', () => {
     await testButtonFilter(filterButtons[4]);
     await testButtonFilter(filterButtons[5]);
     await testButtonFilter(filterButtons[6]);
+    await testButtonFilter(filterAllButton);
   });
 });
