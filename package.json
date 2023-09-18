@@ -1,18 +1,22 @@
 {
   "name": "sd-0x-project-react-testing-library",
   "version": "1.1.0",
+  "homepage": "https://pedro-henrique-a-silva.github.io/react-testing-library/",
   "private": true,
   "engines": {
     "node": "16 || 18"
   },
   "dependencies": {
+    "gh-pages": "^6.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.10.0"
   },
   "scripts": {
     "dev": "vite --open",
-    "build": "vite build",
+    "build": "tsc & vite build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist --repo git@github.com:pedro-henrique-a-silva/react-testing-library.git",
     "preview": "vite preview",
     "test": "vitest",
     "coverage": "vitest run --coverage",
